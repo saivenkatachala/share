@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <link rel="icon" href="123.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareKaro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .floating-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 15s infinite linear;
+        }
+
+        .circle-1 {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .circle-2 {
+            width: 120px;
+            height: 120px;
+            top: 70%;
+            left: 80%;
+            animation-delay: 2s;
+        }
+
+        .circle-3 {
+            width: 60px;
+            height: 60px;
+            top: 40%;
+            left: 85%;
+            animation-delay: 4s;
+        }
+
+        .circle-4 {
+            width: 100px;
+            height: 100px;
+            top: 80%;
+            left: 15%;
+            animation-delay: 6s;
+        }
+
+        .circle-5 {
+            width: 70px;
+            height: 70px;
+            top: 15%;
+            left: 75%;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+                opacity: 0.7;
+            }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 15px;
+            font-size: 28px;
+        }
+
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f, #fdbb2d);
+            border-radius: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #1a2a6c;
+            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.2);
+            background: white;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        button {
+            flex: 1;
+            min-width: 120px;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        #sendBtn {
+            background: linear-gradient(to right, #1a2a6c, #2a3a9c);
+            color: white;
+        }
+
+        #loadBtn {
+            background: linear-gradient(to right, #b21f1f, #d22f2f);
+            color: white;
+        }
+
+        #clearBtn {
+            background: linear-gradient(to right, #fdbb2d, #fdc52d);
+            color: #333;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        button.loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #messages {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(248, 249, 250, 0.8);
+            border-radius: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .msg {
+            background: white;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #1a2a6c;
+            animation: fadeIn 0.5s ease;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #28a745;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            max-width: 300px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+
+        .toast i {
+            font-size: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .toast {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+            }
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
+        }
+
+        .pulse {
+            animation: pulse 1s;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(26, 42, 108, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(26, 42, 108, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(26, 42, 108, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-bg">
+        <div class="floating-circle circle-1"></div>
+        <div class="floating-circle circle-2"></div>
+        <div class="floating-circle circle-3"></div>
+        <div class="floating-circle circle-4"></div>
+        <div class="floating-circle circle-5"></div>
+    </div>
+    
+    <div class="container">
+        <h2><i class="fas fa-paper-plane"></i> Message Share</h2>
+        
+        <div class="input-group">
+            <label for="msgId"><i class="fas fa-id-card"></i> Message ID</label>
+            <input type="text" id="msgId" placeholder="Enter ID (e.g. 1372)">
+        </div>
+        
+        <div class="input-group">
+            <label for="msgText"><i class="fas fa-comment-alt"></i> Your Message</label>
+            <textarea id="msgText" placeholder="Write your message here..."></textarea>
+        </div>
+        
+        <div class="buttons">
+            <button id="sendBtn" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+            <button id="loadBtn" onclick="loadMessages()">
+                <i class="fas fa-download"></i> Load Messages
+            </button>
+            <button id="clearBtn" onclick="clearMessages()">
+                <i class="fas fa-trash-alt"></i> Clear Messages
+            </button>
+        </div>
+        
+        <div id="messages" class="empty-state">
+            <i class="fas fa-inbox"></i><br>
+            No messages yet. Enter an ID and load messages.
+        </div>
+    </div>
+    
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-text">Success!</span>
+    </div>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxEddIfooTg4B7L5mk9NZ1KfQWu8Y-pkWfsldD8lSOANisV6zql-oLLtdfgGk0Vu9vH/exec";
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            
+            toastText.textContent = message;
+            toast.className = 'toast' + (isError ? ' error' : '');
+            toast.querySelector('i').className = isError ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function setButtonLoading(buttonId, isLoading) {
+            const button = document.getElementById(buttonId);
+            const icon = button.querySelector('i');
+            
+            if (isLoading) {
+                button.classList.add('loading');
+                button.disabled = true;
+            } else {
+                button.classList.remove('loading');
+                button.disabled = false;
+            }
+        }
+
+        async function sendMessage(){
+            const id = document.getElementById("msgId").value.trim();
+            const message = document.getElementById("msgText").value.trim();
+            
+            if(!id || !message){
+                showToast("Please enter both ID and message", true);
+                return;
+            }
+            
+            setButtonLoading('sendBtn', true);
+            
+            // Simulate API call with timeout
+            setTimeout(async () => {
+                try {
+                    await fetch(scriptURL, {
+                        method: "POST",
+                        body: JSON.stringify({action: "add", id, message})
+                    });
+                    
+                    document.getElementById("msgText").value = "";
+                    showToast("Message sent successfully!");
+                    
+                    // Add visual feedback for the new message
+                    const messagesDiv = document.getElementById("messages");
+                    if (messagesDiv.classList.contains('empty-state')) {
+                        messagesDiv.classList.remove('empty-state');
+                        messagesDiv.innerHTML = '';
+                    }
+                    
+                    const newMsgElement = document.createElement('div');
+                    newMsgElement.className = 'msg pulse';
+                    newMsgElement.innerHTML = `<i class="fas fa-user-circle"></i> ${message}`;
+                    messagesDiv.appendChild(newMsgElement);
+                    
+                    // Scroll to the new message
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast("Failed to send message", true);
+                } finally {
+                    setButtonLoading('sendBtn', false);
+                }
+            }, 1000);
+        }
+
+        async function loadMessages(){
+            const id = document.getElementById("msgId").value.trim();
+            
+            if(!id){
+                showToast("Please enter an ID", true);
+                return;
+            }
+            
+            setButtonLoading('loadBtn', true);
+            
+            // Simulate API call with timeout
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(scriptURL, {
+                        method: "POST",
+                        body: JSON.stringify({action: "get", id})
+                    });
+                    
+                    const messages = await res.json();
+                    const div = document.getElementById("messages");
+                    
+                    if (messages && messages.length) {
+                        div.classList.remove('empty-state');
+                        div.innerHTML = messages.map(m => `<div class='msg'><i class="fas fa-comment"></i> ${m}</div>`).join("");
+                        
+                        // Scroll to the bottom
+                        div.scrollTop = div.scrollHeight;
+                        
+                        showToast(`Loaded ${messages.length} message(s)`);
+                    } else {
+                        div.innerHTML = `<div class='empty-state'><i class="fas fa-inbox"></i><br>No messages yet for this ID.</div>`;
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast("Failed to load messages", true);
+                } finally {
+                    setButtonLoading('loadBtn', false);
+                }
+            }, 1000);
+        }
+
+        async function clearMessages(){
+            const id = document.getElementById("msgId").value.trim();
+            
+            if(!id){
+                showToast("Please enter an ID", true);
+                return;
+            }
+            
+            if(!confirm("Are you sure you want to clear all messages for this ID?")){
+                return;
+            }
+            
+            setButtonLoading('clearBtn', true);
+            
+            // Simulate API call with timeout
+            setTimeout(async () => {
+                try {
+                    await fetch(scriptURL, {
+                        method: "POST",
+                        body: JSON.stringify({action: "clear", id})
+                    });
+                    
+                    const div = document.getElementById("messages");
+                    div.innerHTML = `<div class='empty-state'><i class="fas fa-inbox"></i><br>No messages yet. Enter an ID and load messages.</div>`;
+                    div.classList.add('empty-state');
+                    
+                    showToast("Messages cleared successfully!");
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast("Failed to clear messages", true);
+                } finally {
+                    setButtonLoading('clearBtn', false);
+                }
+            }, 1000);
+        }
+
+        // Add enter key support for sending messages
+        document.getElementById('msgText').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                sendMessage();
+            }
+        });
+
+        // Add animation to input fields on focus
+        document.querySelectorAll('input, textarea').forEach(element => {
+            element.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            element.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
